@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap");
+
+:root {
+    --silver-1: #f2f2f2;
+    --light-gray-1: #d3d3d3;
+    --purple-1: #8a7bb3;
+}
+
+section {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: space-between;
+}
+
+h3 {
+    padding: 0 20px;
+    font-weight: 300;
+}
+
+video {
+    height: 100%;
+    width: 100%;
+}
+
+canvas {
+    display: none;
+}
+
+#role-camera {
+    width: 75%;
+    background-color: var(--purple-1);
+}
+
+#role-attr {
+    width: 25%;
+    margin: 0 auto;
+    background-color: var(--silver-1);
+}
+
+ul {
+    margin: 0;
+    width: 80%;
+    color: white;
+    list-style: none;
+}
+
+ul>li {
+    margin: 5px 0;
+    padding: 0 10px;
+    font-size: 20px;
+    font-weight: 300;
+    border-radius: 10px;
+    background-color: var(--light-gray-1);
+}
+
+#up-photo {
+    width: 100%;
+    text-align: center;
+}
+

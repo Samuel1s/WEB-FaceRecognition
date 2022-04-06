@@ -1,0 +1,65 @@
+extends layout.pug
+
+block head 
+    link(rel="stylesheet", href="/css/faceDetect.css")
+    title= siteTitle
+
+block content 
+    section
+        article#role-camera 
+            video#video(autoplay) 
+            canvas#canvas 
+        article#role-attr
+            h3 Face de #{data.firstName}
+            div
+                ul 
+            div#up-photo
+                button#submit.btn.btn-primary Enviar
+
+block script 
+    script(src="/js/camera.js") 
+    script(src="/js/api_detect.js") 
+    script.
+        // Local endpoint variable.
+        const LOCAL_URL = 'http://localhost:3333/'
+
+        // Control variables.
+        const sendImage = document.querySelector('#submit')
+
+        // General variables.
+        var currentFace 
+        const currentData = {
+            firstName: '#{data.firstName}',
+            lastName: '#{data.lastName}',
+            gender: '#{data.gender}',
+            email: '#{data.email}',
+            password: '#{data.password}',
+            userImage: [],
+        }
+
+        // Upload Image + Data
+        const getImageAtNow = async (faceImage) => {
+            currentFace = faceImage
+        }
+
+        const sendImageTo = async () => {
+            const { size, type } = currentFace
+            data = { size: size, type: type }
+            currentData.userImage.push({...data})
+
+            try {
+                const { data } = await axios({
+                    method: 'POST',
+                    url: LOCAL_URL + 'users', 
+                    headers: { 'Content-Type': 'application/json' },
+                    data:  currentData
+                })
+                if(data) {
+                    console.log(data)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        sendImage.addEventListener('click', () => sendImageTo())

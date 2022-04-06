@@ -1,0 +1,63 @@
+extends layout.pug 
+
+block head 
+    link(rel="stylesheet", href="/css/registerForm.css")
+    title= siteTitle
+
+block content
+    section
+        div.page-wrapper.bg-gra-02.p-t-100.p-b-100
+            div.wrapper.wrapper--w680
+                div.card.card-4
+                    div.card-body
+                        h2.title Registration Form
+                        form(id="userForm" method='POST')
+                            div.row.row-space
+                                div.col-6
+                                    div.input-group
+                                        label.label First name
+                                        input(class="input--style-4" type="text" name="firstName")
+                                div.col-6
+                                    div.input-group
+                                        label.label Last name
+                                        input(class="input--style-4" type="text" name="lastName")
+                            div.row.row-space
+                                div.col-12
+                                    div.input-group
+                                        label.label Gender 
+                                        div.p-t-30
+                                            label.radio-container.m-r-45 Male
+                                                input(type="radio" checked="checked" name="gender" value="male")
+                                                span.checkmark
+                                            label.radio-container Female
+                                                input(type="radio" checked="checked" name="gender" value="female")
+                                                span.checkmark
+                            div.row.row-space
+                                div.col-12
+                                    div.input-group
+                                        label.label Email
+                                        input(class="input--style-4" type="email" name="email")
+                            div.row.row-space
+                                div.col-12
+                                    div.input-group
+                                        label.label Password
+                                        input(class="input--style-4" type="password" name="password")
+                            div.d-flex.justify-content-around.p-t-15
+                                a(class="btn btn--radius-2 btn--light" href="/") Voltar
+                                button(class="btn btn--radius-2 btn--blue" type="submit") Avançar
+
+block script 
+    script.
+        const formEl = document.querySelector("#userForm")  
+        const fNameEl = document.querySelector('input[name=firstName]')
+        const lNameEl = document.querySelector('input[name=lastName]')
+        const genderEl = document.querySelector('input[name=gender]')
+        const emailEl = document.querySelector('input[name=email]')
+        const passEl = document.querySelector('input[name=password]')
+
+        formEl.addEventListener("submit", (e) => {
+            if (emailEl.value === '' || fNameEl.value === '' || lNameEl.value === '' || genderEl.value === '' || passEl.value === '') {
+                e.preventDefault()
+                alert('Preencha todos os campos')
+            }
+        })
