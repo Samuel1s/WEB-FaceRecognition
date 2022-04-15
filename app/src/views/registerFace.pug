@@ -14,7 +14,7 @@ block content
             div
                 ul 
             div#up-photo
-                button#submit.btn.btn-primary Enviar
+                button#submit.btn.btn-primary Capturar
 
 block script 
     script(src="/js/camera.js") 
@@ -34,32 +34,31 @@ block script
             gender: '#{data.gender}',
             email: '#{data.email}',
             password: '#{data.password}',
-            userImage: [],
+            userImage: {},
         }
 
-        // Upload Image + Data
+        // Get image from camera.js - Midleware setted in public.
         const getImageAtNow = async (faceImage) => {
-            currentFace = faceImage
+            currentFace = faceImage 
         }
-
+        
+        // Upload Image + Data
         const sendImageTo = async () => {
-            const { size, type } = currentFace
-            data = { size: size, type: type }
-            currentData.userImage.push({...data})
-
+            currentData.userImage = currentFace
+            
             try {
                 const { data } = await axios({
                     method: 'POST',
-                    url: LOCAL_URL + 'users', 
-                    headers: { 'Content-Type': 'application/json' },
-                    data:  currentData
+                    url: LOCAL_URL + 'userRegister', 
+                    headers: {'Content-Type': 'application/json' }, 
+                    data: currentData
                 })
                 if(data) {
-                    console.log(data)
+                    alert('Usuário cadastrado com sucesso.')
                 }
             } catch (error) {
                 console.error(error)
-            }
+            }      
         }
 
         sendImage.addEventListener('click', () => sendImageTo())

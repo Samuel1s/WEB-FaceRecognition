@@ -3,13 +3,14 @@ const API_URL = "https://rf2serverapi.cognitiveservices.azure.com/face/v1.0/"
 const KEY = "ce043ddf151e40abb10c4e4e8f6dd770"
 
 // Control variables.
-const ulEl = document.querySelector('ul')
+const setAttEl = document.querySelector('ul')
 
 const processImage = async (sourceImage) => {    
     var param = {
         "detectionModel": "detection_01",
         "returnFaceId": "true",
         "returnAge": "true",
+        "returnFaceRectangle": "true",
         "returnFaceAttributes": "age, emotion, gender, smile", 
         "recognitionModel": "recognition_01"
     }
@@ -31,11 +32,11 @@ const processImage = async (sourceImage) => {
 }
 
 const setFaceAttribute = (data) => {
-    ulEl.innerHTML = ''
-    ulEl.innerHTML += `<li>Idade: ${data.faceAttributes.age}</li>`
-    ulEl.innerHTML += `<li>Sexo: ${data.faceAttributes.gender}</li>`
-    ulEl.innerHTML += `<li>Sorriso: ${data.faceAttributes.smile}</li>`
-    ulEl.innerHTML += `<li>Bravo: ${data.faceAttributes.emotion.anger}</li>`
-    ulEl.innerHTML += `<li>Feliz: ${data.faceAttributes.emotion.happiness}</li>`
-    ulEl.innerHTML += `<li>Neutro: ${data.faceAttributes.emotion.neutral}</li>`
+    setAttEl.innerHTML = ''
+    setAttEl.innerHTML += `<li>Idade: ${data.faceAttributes.age}</li>`
+    setAttEl.innerHTML += `<li>Sexo: ${data.faceAttributes.gender}</li>`
+    setAttEl.innerHTML += `<li>Sorriso: ${data.faceAttributes.smile}</li>`
+    setAttEl.innerHTML += `<li>Bravo: ${data.faceAttributes.emotion.anger}</li>`
+    setAttEl.innerHTML += `<li>Feliz: ${data.faceAttributes.emotion.happiness}</li>`
+    setAttEl.innerHTML += `<li>Neutro: ${data.faceAttributes.emotion.neutral}</li>`
 }

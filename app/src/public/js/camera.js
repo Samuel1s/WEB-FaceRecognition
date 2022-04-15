@@ -34,11 +34,10 @@ void function() {
         const raw = window.atob(parts[1])
         const rawLength = raw.length
         const uInt8Array = new Uint8Array(rawLength)
-    
+
         for (let i=0; i < rawLength; ++i) {
             uInt8Array[i] = raw.charCodeAt(i)
         }
-    
         return new Blob([uInt8Array], { type: contentType })
     }
 
@@ -49,10 +48,10 @@ void function() {
         canvas.width = videoWidth
         canvas.height = videoHeight
         canvas.getContext("2d").drawImage(video, 0 ,0)
-        img.src = canvas.toDataURL("image/png")
-        var blob = makeBlob(img.src)
+        img.src = canvas.toDataURL("image/jpg")
+        getImageAtNow(img.src) // Current Face Image(Base64) getted every time.
+        var blob = makeBlob(img.src) // Convert Image(Base64) to Blob type.
         processImage(blob)
-        getImageAtNow(blob)
     }
 
     const initializeCamera = async() => {
@@ -74,5 +73,5 @@ void function() {
 
     setInterval(function() {
         processFace()
-    }, 10000)
+    }, 5000)
 }()

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 
 const userRoute = (app) => {
     // Set bodyParser type.
-    app.use(bodyParser.json({ type: 'application/json' }))
+    app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }))
 
     app.route('/users/:id?')
     .get(async (req,res) => {
@@ -16,7 +16,8 @@ const userRoute = (app) => {
 
         try {
             const users = await UsersModel.find(query)
-            res.send({ users })
+            res.render('dashUser', { data: users[0] })
+            
         } catch (error) {
             res.status(400).send({ error: 'Failed to find user.' })
         }
@@ -24,8 +25,7 @@ const userRoute = (app) => {
     .post(async (req, res) => {
         try {
             const user = new UsersModel(req.body)
-            console.log(user)
-            //await user.save()
+            await user.save()
 
             res.status(201).send('Usuário cadastrado')
         } catch (error) {

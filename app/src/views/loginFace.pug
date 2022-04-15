@@ -1,0 +1,101 @@
+extends layout.pug 
+
+block head 
+    link(rel="stylesheet", href="/css/authFace.css")
+    title= siteTitle
+
+block content 
+    section
+        article#role-camera 
+            video#video(autoplay) 
+            canvas#canvas 
+        article#role-attr
+            h3 Identificando rosto de #{data.firstName}
+            div
+                button#test.btn.btn-primary Teste
+
+block script 
+    script(src="/js/camera.js") 
+    script.
+        const currentData = {
+            firstName: JSON.parse(`!{JSON.stringify(data.firstName)}`),
+            lastName: JSON.parse(`!{JSON.stringify(data.lastName)}`),
+            gender: JSON.parse(`!{JSON.stringify(data.gender)}`),
+            email: JSON.parse(`!{JSON.stringify(data.email)}`),
+            password: JSON.parse(`!{JSON.stringify(data.password)}`),
+            userImage: JSON.parse(`!{JSON.stringify(data.userImage)}`)
+        }
+        console.log(currentData)
+        var currentFace 
+        let arrayTeste = []
+        
+        // Get image from camera.js - Midleware setted in public.
+        const getImageAtNow = async (faceImage) => {
+            currentFace = faceImage
+        }
+
+        // Control variables.
+        const testAPI = document.querySelector('#test')
+
+        // Cognitive Services variables.
+        const API_URL = "https://rf2serverapi.cognitiveservices.azure.com/face/v1.0/"
+        const KEY = "ce043ddf151e40abb10c4e4e8f6dd770"
+
+        // Control variables.
+        const setAttEl = document.querySelector('ul')
+
+        const processImage = async (sourceImage) => {    
+            var param = {
+                "detectionModel": "detection_01",
+                "returnFaceId": "true",
+                "returnAge": "true",
+                "returnFaceRectangle": "true",
+                "returnFaceAttributes": "age, emotion, gender, smile", 
+                "recognitionModel": "recognition_01"
+            }
+            try {
+                const { data } = await axios({
+                    method: 'POST',
+                    url: API_URL + "detect", 
+                    headers: { "Content-Type": "application/octet-stream", "Ocp-Apim-Subscription-Key": KEY },
+                    params: param,
+                    data: sourceImage,
+                })
+
+                if (data.length == 1) {
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        const testXXImage = async (sourceImage) => {   
+            var n_blob = make
+            console.log(n_blob)
+
+            var param = {
+                "detectionModel": "detection_01",
+                "returnFaceId": "true",
+                "returnAge": "true",
+                "returnFaceRectangle": "true",
+                "returnFaceAttributes": "age, emotion, gender, smile", 
+                "recognitionModel": "recognition_01"
+            }
+            try {
+                const { data } = await axios({
+                    method: 'POST',
+                    url: API_URL + "detect", 
+                    headers: { "Content-Type": "application/octet-stream", "Ocp-Apim-Subscription-Key": KEY },
+                    params: param,
+                    data: n_blob,
+                })
+
+                if (data.length == 1) {
+                    console.log(data[0])
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        testAPI.addEventListener('click', () => testXXImage(currentData.userImage))

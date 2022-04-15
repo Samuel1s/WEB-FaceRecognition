@@ -14,8 +14,8 @@ const schema = new mongoose.Schema({
     },
     password: String,
     userImage: { 
-        type : Array, 
-        "default" : [] 
+        type: Buffer, 
+        default: {}
     }
 }, {
     timestamps: {createdAt: true, updatedAt: true},
