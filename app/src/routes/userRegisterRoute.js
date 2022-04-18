@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 
 const userRegisterRoute = (app) => {
     // Create application/json parser
-    app.use(bodyParser.json({ type: "application/json", limit: "10mb" }))
+    app.use(bodyParser.json({ type: 'application/json', limit: '10mb' }))
 
     app.route('/userRegister')
     .post(async (req, res) => {

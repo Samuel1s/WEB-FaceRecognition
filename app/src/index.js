@@ -4,11 +4,13 @@ import express from 'express'
 
 // Internal Imports
 import db from './config/db.js'
+
+// Internal Imports - Routes of User.
 import userDashRoute from './routes/userDashRoute.js'
 
 // // Internal Imports - Routes of Auth
 import loginAuthRoute from './routes/loginAuthRoute.js'
-import rfaceAuthRoute from './routes/rfaceAuthRoute.js'
+import lfaceAuthRoute from './routes/lfaceAuthRoute.js'
 
 // Internal Imports - Routes of Register
 import dataRegisterRoute from './routes/dataRegisterRoute.js'
@@ -28,7 +30,7 @@ app.set('view engine', 'pug')
 // Config User Routes
 userDashRoute(app)
 loginAuthRoute(app)
-rfaceAuthRoute(app)
+lfaceAuthRoute(app)
 
 // Config Routes of Register
 dataRegisterRoute(app)

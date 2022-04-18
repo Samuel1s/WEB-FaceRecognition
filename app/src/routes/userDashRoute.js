@@ -8,7 +8,7 @@ const userRoute = (app) => {
     app.route('/users/:id?')
     .get(async (req,res) => {
         const { id } = req.params
-        const query = {};
+        const query = {}
 
         if (id) {
             query._id = id

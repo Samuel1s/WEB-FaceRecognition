@@ -1,13 +1,13 @@
 extends layout.pug 
 
 block head 
-    link(rel="stylesheet", href="/css/index.css")
+    link(rel='stylesheet', href='/css/index.css')
     title= siteTitle
 
 block content
    section.container
         if error_msg != ''
-            div(class="alert alert-danger" role="alert")= error_msg
+            div(class='alert alert-danger' role='alert')= error_msg
 
         div.row
             div.col-md-6.offset-md-3
@@ -15,30 +15,30 @@ block content
                     form(method='POST').card-body.cardbody-color.p-lg-5
                         div.text-center
                             img(
-                                src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png"
-                                class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" 
-                                width="200px"
-                                alt="profile"
+                                src='https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png'
+                                class='img-fluid profile-image-pic img-thumbnail rounded-circle my-3' 
+                                width='200px'
+                                alt='profile'
                             )
                         div.mb-3
                             input(
-                                type="email" 
-                                class="form-control" 
-                                name="email"
-                                id="email" 
-                                placeholder="Email"
+                                type='email' 
+                                class='form-control' 
+                                name='email'
+                                id='email' 
+                                placeholder='Email'
                             )
                         div.mb-3
                             input(
-                                type="password"
-                                class="form-control" 
-                                name="password"
-                                id="password" 
-                                placeholder="Password"
+                                type='password'
+                                class='form-control' 
+                                name='password'
+                                id='password' 
+                                placeholder='Password'
                             )
                         div.text-center
                             button#btn-color.btn.px-5.mb-5.w-100(
-                                type="submit" 
+                                type='submit' 
                             ) Login
                         div#emailHelp.form-text.text-center.mb-5.text-dark Not Registered? 
-                            a(href="/dataRegister" class="text-dark fw-bold") Create an Account
+                            a(href='/dataRegister' class='text-dark fw-bold') Create an Account

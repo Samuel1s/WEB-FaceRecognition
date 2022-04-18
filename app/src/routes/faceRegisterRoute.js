@@ -6,7 +6,12 @@ const faceRegisterRoute = (app) => {
 
     app.route('/faceRegister')
     .post(async (req, res) => {
-        res.render('registerFace', { data: req.body }) 
+        res.render('registerFace', { 
+            data: req.body, 
+            LOCAL_URL: process.env.LOCAL_URL, 
+            API_URL: process.env.API_URL, 
+            KEY: process.env.KEY
+        }) 
     })
 }
 

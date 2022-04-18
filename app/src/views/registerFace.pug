@@ -1,7 +1,7 @@
 extends layout.pug
 
 block head 
-    link(rel="stylesheet", href="/css/faceDetect.css")
+    link(rel='stylesheet', href='/css/faceDetect.css')
     title= siteTitle
 
 block content 
@@ -17,11 +17,15 @@ block content
                 button#submit.btn.btn-primary Capturar
 
 block script 
-    script(src="/js/camera.js") 
-    script(src="/js/api_detect.js") 
+    script(src='/js/camera.js') 
+    script(src='/js/api_detect.js') 
     script.
+        // Cognitive Services variables.
+        const API_URL = '#{API_URL}'
+        const KEY = '#{KEY}'
+
         // Local endpoint variable.
-        const LOCAL_URL = 'http://localhost:3333/'
+        const LOCAL_URL = '#{LOCAL_URL}'
 
         // Control variables.
         const sendImage = document.querySelector('#submit')
