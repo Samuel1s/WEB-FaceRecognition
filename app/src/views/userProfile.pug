@@ -1,0 +1,51 @@
+extends layout.pug 
+
+block head 
+    link(rel='stylesheet', href='/css/userProfile.css')
+    title= siteTitle
+
+block content
+    section
+        div.container
+            div.main-body
+                div.row.gutters-sm
+                    div.col-md-4
+                        div.card
+                            div.card-body
+                                div.d-flex.flex-column.align-items-center.text-center
+                                    if data.gender == 'male'
+                                        img(src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="User" class="rounded-circle" width="150")
+                                    else 
+                                        img(src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="User" class="rounded-circle" width="150")
+                                    div.mt-3
+                                        h4 #{data.firstName} #{data.lastName}
+                                        p.text-secondary.mb-1 Full Stack Developer
+                                        p.text-muted.font-size-sm Bay Area, San Francisco, CA
+                    
+                    div.col-md-8
+                        div.card
+                            div.card-body
+                                hr
+                                div.row
+                                    div.col-sm-3
+                                        h6.mb-0 First Name 
+                                    div.col-sm-9.text-secondary= data.firstName
+                                hr
+                                div.row
+                                    div.col-sm-3
+                                        h6.mb-0 Last Name 
+                                    div.col-sm-9.text-secondary= data.lastName
+                                hr
+                                div.row
+                                    div.col-sm-3
+                                        h6.mb-0 Email
+                                    div.col-sm-9.text-secondary= data.email
+                                hr
+                                div.row
+                                    div.col-sm-3
+                                        h6.mb-0 Gender
+                                    div.col-sm-9.text-secondary= data.gender
+                                hr
+
+block script 
+    script.

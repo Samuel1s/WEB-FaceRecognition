@@ -8,7 +8,9 @@ html {
 body {
     margin: 0;
     color: black;
+    min-height: 100vh;
     font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to top right, #8a7bb3 0%, #f2f2f2 100%)
 }
 
 /* -- Main and Basics Style. -- */

@@ -1,5 +1,5 @@
 // Open Camera and set functions near real time.
-const authFace = async (current_blob, database_blob) => {
+const faceAuth = async (current_blob, database_blob) => {
     // Azure API's - To Find.
     const processImage = async (sourceImage) => {    
         var param = {
@@ -61,15 +61,24 @@ const authFace = async (current_blob, database_blob) => {
     ])
 
     try {
-        const res = await allPromises
-        if(res) {
+        const response = await allPromises
 
+        const { data } = await axios({
+            method: 'POST',
+            url: LOCAL_URL + 'login', 
+            headers: {'Content-Type': 'application/json' }, 
+            data: response[2],
+        })
+        if(data.redirect) {
+            window.location = `${data.redirect}`
         }
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
+// Camera start with navigator js.
 void function() {
     if (!'mediaDevices' in navigator || 
         !'getUserMedia' in navigator.mediaDevices
@@ -121,9 +130,9 @@ void function() {
         canvas.height = videoHeight
         canvas.getContext('2d').drawImage(video, 0 ,0)
         img.src = canvas.toDataURL('image/jpg')
-        var current_blob = makeBlob(img.src)
-        var database_blob = makeBlob(image64)
-        authFace(current_blob, database_blob) // Send current face 
+        let current_blob = makeBlob(img.src)
+        let database_blob = makeBlob(image64)
+        faceAuth(current_blob, database_blob) // Send current face 
     }
 
     const initializeCamera = async() => {
@@ -137,7 +146,7 @@ void function() {
         }
     }
 
-    initializeCamera()
+    initializeCamera()    
 
     setTimeout(function(){
         processFace()
@@ -145,5 +154,5 @@ void function() {
 
     setInterval(function() {
         processFace()
-    }, 5000)
+    }, 8000)
 }()

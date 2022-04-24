@@ -5,8 +5,11 @@ block head
     title= siteTitle
 
 block content
-    section
-        div.page-wrapper.bg-gra-02.p-t-100.p-b-100
+    section.bg-gra-02
+        if error_msg != ''
+            div(class='alert alert-danger' role='alert')= error_msg
+
+        div.page-wrapper.p-t-25
             div.wrapper.wrapper--w680
                 div.card.card-4
                     div.card-body
@@ -43,7 +46,7 @@ block content
                                         label.label Password
                                         input(class='input--style-4' type='password' name='password')
                             div.d-flex.justify-content-around.p-t-15
-                                a(class='btn btn--radius-2 btn--light' href='/') Voltar
+                                a(class='btn btn--radius-2 btn--light' href='/login') Voltar
                                 button(class='btn btn--radius-2 btn--blue' type='submit') Avançar
 
 block script 

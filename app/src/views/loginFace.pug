@@ -1,18 +1,23 @@
 extends layout.pug 
 
 block head 
-    link(rel='stylesheet', href='/css/authFace.css')
+    link(rel='stylesheet', href='/css/faceAuth.css')
     title= siteTitle
 
 block content 
     section
-        article#role-camera 
+        article#role-camera.p-3
             video#video(autoplay) 
             canvas#canvas 
-        article#role-attr
-            h3 Identificando rosto de #{data.firstName}
-            div
-                button#test.btn.btn-primary Teste
+        article#role-auth
+            h3.text-center Identificando rosto de #{data.firstName}
+            ul.text-center
+                li O ambiente deve estar iluminado.
+                li Aproxime sua face da camera.
+                li Aguarde um tempo.
+            div#spinner-content
+                div(class='spinner-border text-primary' role='status')
+                    span(class='visually-hidden')
 
 block script 
     script(src='/js/api_find.js')
@@ -26,5 +31,3 @@ block script
 
         // General variables.
         const image64 = '#{data.userImage}'
-
-

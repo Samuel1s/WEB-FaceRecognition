@@ -1,46 +1,48 @@
 import UsersModel from '../model/users.js'
-import cookieParser from 'cookie-parser'
-import session from 'express-session'
 import bodyParser from 'body-parser'
-import flash from 'connect-flash'
 
 const loginAuthRoute = (app) => {
     // Set bodyParser type.
-    app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }))
- 
-    // Set Sessions to use Flash.
-    app.use(cookieParser('SecretStringForCookies'))
-    app.use(session({ secret: 'SecretStringForCookies', resave: true, saveUninitialized: true }))
-    app.use(flash())
+    app.use(bodyParser.urlencoded({ extended: false })) // To login form.
+    app.use(bodyParser.json()) // To face auth data.
 
-    app.route('/')
+    // Route to set login credentials.
+    app.route('/login')
     .get(async (req, res) => {
-        const error_msg = req.flash('error_msg') // If auth failed.
-        res.render('loginForm', { error_msg })
+        const error_msg = req.flash('error_msg') 
+        const success_msg = req.flash('success_msg')
+
+        return res.render('loginForm', { error_msg: error_msg, success_msg: success_msg })
     })
     .post(async (req, res) => {
-        try {
-            const query = {
-                email: req.body.email, 
-                password: req.body.password
-            }
+        const { confidence } = req.body
 
-            const user = await UsersModel.findOne(query).exec()
-            if (user !== null) {
-                res.render('loginFace', { 
-                    data: user, 
-                    LOCAL_URL: process.env.LOCAL_URL, 
-                    API_URL: process.env.API_URL, 
-                    KEY: process.env.KEY
-                }) 
+        if(confidence > 0.6) {
 
-            } else { 
-                req.flash('error_msg', 'Login ou senha incorretos.')
-                res.redirect('/')
+            return res.status(200).json({ redirect: '/home' })
+        } else {
+            try {
+                const { email, password } = req.body
+                const query = { email: email,  password: password }
+                const user = await UsersModel.findOne(query).exec()
+
+                if (user !== null) {
+                    req.flash('user_data', user) // To send user data.
+
+                    return res.render('loginFace', 
+                    {   
+                        data: user, 
+                        LOCAL_URL: process.env.LOCAL_URL, API_URL: process.env.API_URL, KEY: process.env.KEY
+                    }) 
+    
+                } else { 
+                    req.flash('error_msg', 'Login ou senha incorretos.')
+                    return res.redirect('/login')
+                }
+                    
+            } catch (error) {
+                return res.status(400).send({ error: 'Failed to find user - Request Error' + error })
             }
-            
-        } catch (error) {
-            res.status(400).send({ error: 'Failed to find user - Request Error' + error })
         }
     })
 }
