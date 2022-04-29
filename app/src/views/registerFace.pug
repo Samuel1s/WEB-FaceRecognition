@@ -14,7 +14,22 @@ block content
             div
                 ul 
             div#up-photo
-                button#submit.btn.btn-primary Capturar
+                button#showModal.btn.btn-info(type='button'  data-bs-toggle='modal' data-bs-target='#userModal') Capturar
+
+        //- Modal
+        div#userModal.modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true')
+            div.modal-dialog.modal-dialog-centered.modal-lg
+                div.modal-content
+                    div.modal-header
+                        h5#staticBackdropLabel.modal-title Sua Imagem atual
+                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+
+                    div.modal-body
+                        img#userImage(src='' alt='User image' width='100%' height='100%')
+
+                    div.modal-footer
+                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Fechar
+                        button#submit.btn.btn-primary(type='button') Enviar
 
 block script 
     script(src='/js/api_detect.js') 
@@ -28,13 +43,21 @@ block script
 
         // General variables.
         let currentFace 
+        let saveUserImageToSend 
 
         // Control variables.
         const sendImage = document.querySelector('#submit')
+        const userModalEl = document.querySelector('#showModal')
+        const userImageEl = document.querySelector('#userImage')
 
         // Get current user image from in api_detect - Midleware setted in public.
         const getCurrentImage = async (faceImage) => {
             currentFace = faceImage 
+        }
+
+        const showCurrentUserImage = async () => {
+            saveUserImageToSend = currentFace
+            userImageEl.src = saveUserImageToSend
         }
 
         // Upload Image + Data
@@ -56,3 +79,4 @@ block script
         }
         
         sendImage.addEventListener('click', () => registerAndSendUserFace())
+        userModalEl.addEventListener('click', () => showCurrentUserImage())
