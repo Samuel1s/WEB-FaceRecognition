@@ -41,12 +41,12 @@ canvas {
 }
 
 #role-camera {
-    width: 50%;
+    width: 55%;
     background-color: var(--purple-1);
 }
 
 #role-auth {
-    width: 50%;
+    width: 45%;
     margin: 0 auto;
     padding: 2em 0;
     background-color: var(--silver-1);

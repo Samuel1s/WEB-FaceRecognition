@@ -31,7 +31,7 @@ const loginAuthRoute = (app) => {
                 const user = await UsersModel.findOne(query).exec()
 
                 if (user !== null) {
-                    req.flash('user_data', user) // To send user data.
+                    req.flash('user_data', user)// To send user data.
 
                     return res.render('loginFace', 
                     {   

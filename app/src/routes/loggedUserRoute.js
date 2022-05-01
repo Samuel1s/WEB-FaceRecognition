@@ -6,9 +6,9 @@ const loggedUserRoute = (app) => {
 
     app.route('/home')
     .get(async (req, res) => {
-        const user_data = req.flash('user_data') 
-
-        return res.render('userProfile', { data: user_data[0] })
+        const user_data = req.flash('user_data')
+        
+        return res.render('userProfile', { data: user_data.pop()})
     })
 }
 
