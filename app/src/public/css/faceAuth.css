@@ -57,3 +57,9 @@ canvas {
     margin: 1em 0;
     text-align: center;
 }
+
+#error_alert {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+}

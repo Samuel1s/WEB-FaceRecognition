@@ -15,11 +15,15 @@ const loginAuthRoute = (app) => {
         return res.render('loginForm', { error_msg: error_msg, success_msg: success_msg })
     })
     .post(async (req, res) => {
-        const { confidence } = req.body
+        const { isIdentical, confidence } = req.body
 
-        if(confidence > 0.6) {
+        if (typeof isIdentical !== 'undefined') { // Returns true without throwing errors.
+            if (isIdentical && confidence > 0.5)
+                return res.status(200).json({ redirect: '/home' })
 
-            return res.status(200).json({ redirect: '/home' })
+            else
+                return res.status(200).json({ log_error_msg: 'Usuário não identificado. Face incorreta.' })
+
         } else {
             try {
                 const { email, password } = req.body

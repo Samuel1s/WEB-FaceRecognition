@@ -27,22 +27,20 @@ const faceAuth = async (current_blob, database_blob) => {
         }
     }
 
-    const findSimilarFace = async(faceId, faceIds) => {    
+    const verifySimilarFace = async(currentFaceId, dbFaceId) => {    
         try {
             const { data } = await axios({
                 method: 'POST',
-                url: API_URL + "findsimilars",
-                headers: { "Content-Type": "application/json", "Ocp-Apim-Subscription-Key": KEY },
-                params: "",
+                url: API_URL + 'verify',
+                headers: { 'Content-Type': 'application/json', 'Ocp-Apim-Subscription-Key': KEY },
+                params: '',
                 data: {
-                    "faceId": faceId,
-                    "faceIds": [faceIds],
-                    "maxNumOfCandidatesReturned": 1,
-                    "mode": "matchPerson"
+                    'faceId1': currentFaceId,
+                    'faceId2': dbFaceId,
                 },
             })
-            if (data.length == 1) {
-                return data[0]
+            if (data) {
+                return data
             }
         } catch (error) {
             console.log(error.status, error.message)
@@ -57,7 +55,7 @@ const faceAuth = async (current_blob, database_blob) => {
     const allPromises = Promise.all([
         current_image_face_id = await processImage(current_blob),
         database_image_face_id = await processImage(database_blob),
-        user_data = await findSimilarFace(current_image_face_id, database_image_face_id),
+        user_data = await verifySimilarFace(current_image_face_id, database_image_face_id),
     ])
 
     try {
@@ -71,8 +69,10 @@ const faceAuth = async (current_blob, database_blob) => {
         })
         if(data.redirect) {
             window.location = `${data.redirect}`
-        }
 
+        } else if (data.log_error_msg) {
+            document.querySelector('#error_alert').innerHTML = `${data.log_error_msg}`
+        }
     } catch (error) {
         console.log(error.message)
     }
