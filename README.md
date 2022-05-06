@@ -3,7 +3,7 @@ O presente trabalho tem como intuito utilizar a tecnologia de reconhecimento fac
 usuários no ambiente web. É muito comum a utilização neste ambiente a autenticação por dois fatores 
 (2FA) para aprimorar o processo.Todavia, este trabalho não busca a substituição da tecnologia existente de aprimoramento mas apresenta a oportunidade de analisarmos a performance e viabilidade do uso da tecnologia de reconhecimento facial no ambiente web como um segunda forma de aprimorarmos o processo de autenticação. 
 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/project-img/Web-FaceRec.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/Web-FaceRec.png)
 ---
 
 ### Sumário
@@ -25,22 +25,22 @@ Após a criação da sua conta entre no _Portal Azure_ na barra de pesquisa e di
 
 ### Etapa 1 
 #### Dentro do Portal Azure.
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/project-img/Portal_Azure.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/Portal_Azure.png)
 ---
 
 ### Etapa 2
 #### Criação de um novo serviço. 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/project-img/Create_Details.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/Create_Details.png)
 ---
 
 ### Etapa 3
 #### Detalhe do projeto - Deve-se escolher a região EAST-US para ter o serviço gratuito. 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/project-img/Project_FaceAPI_Details.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/Project_FaceAPI_Details.png)
 ---
 
 ### Etapa 4
 #### Com o processo realizado com sucesso deve aparecer algo semelhante a isto. 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/project-img/RFA_Details.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/RFA_Details.png)
 ---
 
 #### Technologies
