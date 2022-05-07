@@ -97,12 +97,12 @@ Com o ambiente node instalado em sua máquina tornam-se necessários apenas o cl
 
 Ademais as outras strings necessárias para o funcionamento da aplicação estão mencionadas no arquivo _app/.env-ex_. Podemos notar todas strings que serão necessárias para todo o projeto sendo duas delas opcionais como a **PORT** e a **LOCAL_URL** e três obrigatórias como **DB_CONNECTION**, **KEY** e **API_URL**.
 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/env-ex.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/env_ex.png)
 ---
 
 Portanto, com essa etapa concluída basta renomear esse arquivo para **.env** e com as dependências instaladas basta digitar o comando **npm run start** dentro do diretório _/app_ (onde ficará o package.json) para iniciar a aplicação em um ambiente local. Em seu navegador de preferência entre no seu servidor local + _/login_ para utilizar a aplicação. 
 
-![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/terminal-ex.png)
+![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/terminal_ex.png)
 ---
 ![Project Image](https://github.com/Samuel1s/WEB-FaceRecognition/blob/main/project-img/tela_login.png)
 ---
