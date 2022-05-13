@@ -13,7 +13,7 @@ Os cabeçalhos de suas seções serão usados para referenciar o local de destin
 
 - [Descrição](#Descrição)
 - [Como Usar](#Uso)
-- [Referências](#Referencias)
+- [Referências](#Referências)
 - [Créditos](#Créditos)
 - [Informações do Autor](#author-info)
 
@@ -115,12 +115,11 @@ Portanto, com essa etapa concluída basta renomear esse arquivo para **.env** e 
 
 ## Referências
 
+"O serviço de Detecção Facial do Azure fornece algoritmos de IA para detectar, reconhecer e analisar rostos humanos em imagens. O software de reconhecimento facial é importante em muitos cenários diferentes, como verificação de identidade, controle de acesso sem toque e desfoque de rosto para maior privacidade." - [FaceAPI](https://docs.microsoft.com/pt-br/azure/cognitive-services/face/overview). Em breve será disponibilizado um link para um artigo deste projeto, neste conterá maiores explicações das motivações que levaram ao desenvolvimento e a análise dos testes feitos.
 
 #### API Reference
 
-```html
-    <p>dummy code</p>
-```
+Toda a documentação da API utilizada encontra-se em [FaceAPI](https://docs.microsoft.com/pt-br/azure/cognitive-services/face/overview). 
 
 [Voltar para cima](#web-facerecognition)
 

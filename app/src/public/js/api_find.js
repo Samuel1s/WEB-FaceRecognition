@@ -4,11 +4,7 @@ const faceAuth = async (current_blob, database_blob) => {
     const processImage = async (sourceImage) => {    
         var param = {
             'detectionModel': 'detection_01',
-            'returnFaceId': 'true',
-            'returnAge': 'true',
-            'returnFaceRectangle': 'true',
-            'returnFaceAttributes': 'age, emotion, gender, smile', 
-            'recognitionModel': 'recognition_01'
+            'recognitionModel': 'recognition_04'
         }
         try {
             const { data } = await axios({
@@ -60,7 +56,7 @@ const faceAuth = async (current_blob, database_blob) => {
 
     try {
         const response = await allPromises
-
+        
         const { data } = await axios({
             method: 'POST',
             url: LOCAL_URL + 'login', 
@@ -129,7 +125,7 @@ void function() {
         canvas.width = videoWidth
         canvas.height = videoHeight
         canvas.getContext('2d').drawImage(video, 0 ,0)
-        img.src = canvas.toDataURL('image/jpg')
+        img.src = canvas.toDataURL('image/jpeg')
         let current_blob = makeBlob(img.src)
         let database_blob = makeBlob(image64)
         faceAuth(current_blob, database_blob) // Send current face 
@@ -154,5 +150,5 @@ void function() {
 
     setInterval(function() {
         processFace()
-    }, 8000)
+    }, 5000)
 }()

@@ -5,11 +5,8 @@ const detectFaceAttributes = async (blob) => {
     const processImage = async (sourceImage) => {    
         var param = {
             'detectionModel': 'detection_01',
-            'returnFaceId': 'true',
-            'returnAge': 'true',
-            'returnFaceRectangle': 'true',
-            'returnFaceAttributes': 'age, emotion, gender, smile', 
-            'recognitionModel': 'recognition_01'
+            'recognitionModel': 'recognition_04',
+            'returnFaceAttributes': 'age, gender, smile, emotion'
         }
         try {
             const { data } = await axios({

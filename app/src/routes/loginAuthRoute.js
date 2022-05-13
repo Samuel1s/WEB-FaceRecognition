@@ -2,6 +2,9 @@ import UsersModel from '../model/users.js'
 import bodyParser from 'body-parser'
 
 const loginAuthRoute = (app) => {
+    // Control variables.
+    let n_attempts = 1 // Count the number of attempts to login.
+
     // Set bodyParser type.
     app.use(bodyParser.urlencoded({ extended: false })) // To login form.
     app.use(bodyParser.json()) // To face auth data.
@@ -18,12 +21,19 @@ const loginAuthRoute = (app) => {
         const { isIdentical, confidence } = req.body
 
         if (typeof isIdentical !== 'undefined') { // Returns true without throwing errors.
-            if (isIdentical && confidence > 0.5)
+            console.log('Confiança:' + confidence)
+            if (isIdentical && confidence > 0.5) {
                 return res.status(200).json({ redirect: '/home' })
-
-            else
-                return res.status(200).json({ log_error_msg: 'Usuário não identificado. Face incorreta.' })
-
+            } else {
+                if (n_attempts < 3) {
+                    n_attempts += 1
+                    return res.status(200).json({ log_error_msg: 'Usuário não identificado. Face incorreta.' })
+                } else {
+                    n_attempts = 1
+                    req.flash('error_msg', 'Usuário não identificado, houve 3 tentativas e todas falharam!')
+                    return res.status(200).json({ redirect: '/login' })
+                }
+            }
         } else {
             try {
                 const { email, password } = req.body
