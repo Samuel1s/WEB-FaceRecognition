@@ -22,7 +22,7 @@ const loginAuthRoute = (app) => {
 
         if (typeof isIdentical !== 'undefined') { // Returns true without throwing errors.
             console.log('Confiança:' + confidence)
-            if (isIdentical && confidence > 0.5) {
+            if (isIdentical && confidence > 0.6) {
                 return res.status(200).json({ redirect: '/home' })
             } else {
                 if (n_attempts < 3) {
