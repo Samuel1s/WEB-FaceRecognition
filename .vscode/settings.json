@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/1bbed42f-c8a6-4e87-829b-ccaf5931df7d/microsoft.web/sites/subscriptions/1bbed42f-c8a6-4e87-829b-ccaf5931df7d/resourceGroups/RG-RF-PRD/providers/Microsoft.Web/sites/WebFaceRecognition",
-    "appService.deploySubpath": "app"
-}
