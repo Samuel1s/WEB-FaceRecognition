@@ -61,7 +61,7 @@ const verifyFaceAndAuth = (function() {
             try {
                 const { data } = await axios({
                     method: 'POST',
-                    url: LOCAL_URL + 'login', 
+                    url: LOCAL_URL, 
                     headers: {'Content-Type': 'application/json' }, 
                     data: response[2],
                 })
