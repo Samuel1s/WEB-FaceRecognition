@@ -28,7 +28,7 @@ const faceRegisterRoute = (app) => {
             if (updatedUser) {
                 req.flash('success_msg', 'Usuário cadastrado.')
 
-                return res.status(200).json({ redirect: '/login'})
+                return res.status(200).json({ redirect: '/'})
             }
 
             return res.status(400).send({ error: 'Could not update the user.' })

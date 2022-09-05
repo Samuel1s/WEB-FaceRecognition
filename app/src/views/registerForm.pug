@@ -5,49 +5,50 @@ block head
     title= siteTitle
 
 block content
-    section.bg-gra-02
-        if error_msg != ''
-            div(class='alert alert-danger' role='alert')= error_msg
+    if error_msg != ''
+        div(class='container alert alert-danger alert-dismissible show fade' role='alert')
+            button(class='btn-close' data-bs-dismiss='alert') 
+            strong= error_msg
 
-        div.page-wrapper.p-t-25
-            div.wrapper.wrapper--w680
-                div.card.card-4
-                    div.card-body
-                        h2.title Registration Form
-                        form(id='userForm' method='POST')
-                            div.row.row-space
-                                div.col-6
-                                    div.input-group
-                                        label.label First name
-                                        input(class='input--style-4' type='text' name='firstName')
-                                div.col-6
-                                    div.input-group
-                                        label.label Last name
-                                        input(class='input--style-4' type='text' name='lastName')
-                            div.row.row-space
-                                div.col-12
-                                    div.input-group
-                                        label.label Gender 
-                                        div.p-t-30
-                                            label.radio-container.m-r-45 Male
-                                                input(type='radio' checked='checked' name='gender' value='male')
-                                                span.checkmark
-                                            label.radio-container Female
-                                                input(type='radio' checked='checked' name='gender' value='female')
-                                                span.checkmark
-                            div.row.row-space
-                                div.col-12
-                                    div.input-group
-                                        label.label Email
-                                        input(class='input--style-4' type='email' name='email')
-                            div.row.row-space
-                                div.col-12
-                                    div.input-group
-                                        label.label Password
-                                        input(class='input--style-4' type='password' name='password')
-                            div.d-flex.justify-content-around.p-t-15
-                                a(class='btn btn--radius-2 btn--light' href='/login') Voltar
-                                button(class='btn btn--radius-2 btn--blue' type='submit') Avançar
+    section.container
+        div.wrapper.wrapper--w680
+            div.card.card-4
+                div.card-body
+                    h2.title Registration Form
+                    form(id='userForm' method='POST')
+                        div.row.row-space
+                            div.col-6
+                                div.input-group
+                                    label.label First name
+                                    input(class='input--style-4' type='text' name='firstName')
+                            div.col-6
+                                div.input-group
+                                    label.label Last name
+                                    input(class='input--style-4' type='text' name='lastName')
+                        div.row.row-space
+                            div.col-12
+                                div.input-group
+                                    label.label Gender 
+                                    div.p-t-30
+                                        label.radio-container.m-r-45 Male
+                                            input(type='radio' checked='checked' name='gender' value='male')
+                                            span.checkmark
+                                        label.radio-container Female
+                                            input(type='radio' checked='checked' name='gender' value='female')
+                                            span.checkmark
+                        div.row.row-space
+                            div.col-12
+                                div.input-group
+                                    label.label Email
+                                    input(class='input--style-4' type='email' name='email')
+                        div.row.row-space
+                            div.col-12
+                                div.input-group
+                                    label.label Password
+                                    input(class='input--style-4' type='password' name='password')
+                        div.d-flex.justify-content-around.p-t-15
+                            a(class='btn btn-color-2 btn--radius-2 ' href='/') Voltar
+                            button(class='btn btn-color btn--radius-2 ' type='submit') Avançar
 
 block script 
     script.
@@ -65,8 +66,4 @@ block script
             }
         })
 
-        const alert = document.querySelector('.alert')
-        
-        setTimeout(function(){
-            alert.style.display = 'none'
-        }, 3000)
+        window.onload = setTimeout(() => document.querySelector('.alert').remove(), 3000)

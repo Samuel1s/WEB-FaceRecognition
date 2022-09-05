@@ -1,18 +1,24 @@
-// Open Camera and set functions near real time.
-const faceAuth = async (current_blob, database_blob) => {
-    // Azure API's - To Find.
-    const processImage = async (sourceImage) => {    
-        var param = {
-            'detectionModel': 'detection_01',
-            'recognitionModel': 'recognition_04'
-        }
+import { getFrame, makeBlobFromFrame } from './general_functions.js'
+
+// Control variables.
+const video = document.querySelector('#video')
+
+// General Variables.
+let currentFrame
+let currentBlobFromFrame
+let blobFromDatabaseFrame 
+
+// Detect face attribute from Blob archive.
+const verifyFaceAndAuth = (function() {
+    async function detectFaceAndReturnId(blob) {
+        const param = { 'detectionModel': 'detection_01', 'recognitionModel': 'recognition_04'}
         try {
             const { data } = await axios({
                 method: 'POST',
                 url: API_URL + 'detect', 
                 headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': KEY },
                 params: param,
-                data: sourceImage,
+                data: blob,
             })
 
             if (data.length == 1) {
@@ -23,17 +29,14 @@ const faceAuth = async (current_blob, database_blob) => {
         }
     }
 
-    const verifySimilarFace = async(currentFaceId, dbFaceId) => {    
+    async function faceVerify(currentFaceId, databaseFaceId) {    
         try {
             const { data } = await axios({
                 method: 'POST',
                 url: API_URL + 'verify',
                 headers: { 'Content-Type': 'application/json', 'Ocp-Apim-Subscription-Key': KEY },
                 params: '',
-                data: {
-                    'faceId1': currentFaceId,
-                    'faceId2': dbFaceId,
-                },
+                data: {'faceId1': currentFaceId, 'faceId2': databaseFaceId },
             })
             if (data) {
                 return data
@@ -42,40 +45,43 @@ const faceAuth = async (current_blob, database_blob) => {
             console.log(error.status, error.message)
         }
     }  
+    
+    return {
+        authenticate: async function() {
+            let currentFrameId
+            let databaseFrameId
 
-    // General Variables.
-    let current_image_face_id = '' 
-    let database_image_face_id = ''
-    let user_data = {}
+            const response = await Promise.all
+            ([
+                currentFrameId = await detectFaceAndReturnId(currentBlobFromFrame),
+                databaseFrameId = await detectFaceAndReturnId(blobFromDatabaseFrame),
+                faceVerify(currentFrameId, databaseFrameId),
+            ])
 
-    const allPromises = Promise.all([
-        current_image_face_id = await processImage(current_blob),
-        database_image_face_id = await processImage(database_blob),
-        user_data = await verifySimilarFace(current_image_face_id, database_image_face_id),
-    ])
-
-    try {
-        const response = await allPromises
+            try {
+                const { data } = await axios({
+                    method: 'POST',
+                    url: LOCAL_URL + 'login', 
+                    headers: {'Content-Type': 'application/json' }, 
+                    data: response[2],
+                })
+                
+                if(data.redirect) {
+                    window.location = `${data.redirect}`
         
-        const { data } = await axios({
-            method: 'POST',
-            url: LOCAL_URL + 'login', 
-            headers: {'Content-Type': 'application/json' }, 
-            data: response[2],
-        })
-        if(data.redirect) {
-            window.location = `${data.redirect}`
+                } else if (data.log_error_msg) {
+                    document.querySelector('#error_alert').innerText = `${data.log_error_msg}`
+                }
 
-        } else if (data.log_error_msg) {
-            document.querySelector('#error_alert').innerHTML = `${data.log_error_msg}`
+            } catch (err) {
+                console.log(err.message)
+            }
         }
-    } catch (error) {
-        console.log(error.message)
     }
-}
+})()
 
-// Camera start with navigator js.
-void function() {
+// Start camera with navigator js and get frame by frame to build a user face image.
+void async function startCamera() {
     if (!'mediaDevices' in navigator || 
         !'getUserMedia' in navigator.mediaDevices
     ){
@@ -83,12 +89,7 @@ void function() {
         return
     } 
 
-    // Control variables.
-    const video = document.querySelector('#video')
-    const canvas = document.querySelector('#canvas')
-
     // General variables.
-    let videoStream
     const constraints = {
         video: {
             width: {
@@ -100,55 +101,37 @@ void function() {
                 min: 720,
                 ideal: 1080,
                 max: 1440
-            }
+            },
+            facingMode: 'user'
         }
     }
 
-    const makeBlob = (dataURL) => {
-        const BASE64_MAKER = ';base64,'
-        const parts = dataURL.split(BASE64_MAKER)
-        const contentType = parts[0].split(':')[1]
-        const raw = window.atob(parts[1])
-        const rawLength = raw.length
-        const uInt8Array = new Uint8Array(rawLength)
-    
-        for (let i=0; i < rawLength; ++i) {
-            uInt8Array[i] = raw.charCodeAt(i)
-        }
-        return new Blob([uInt8Array], { type: contentType })
-    }     
+    try {
+        let videoStream = await navigator.mediaDevices.getUserMedia(constraints)
+        video.srcObject = videoStream
 
-    const processFace = () => {
-        const { videoWidth, videoHeight } = video
-
-        const img = document.createElement('img')
-        canvas.width = videoWidth
-        canvas.height = videoHeight
-        canvas.getContext('2d').drawImage(video, 0 ,0)
-        img.src = canvas.toDataURL('image/jpeg')
-        let current_blob = makeBlob(img.src)
-        let database_blob = makeBlob(image64)
-        faceAuth(current_blob, database_blob) // Send current face 
+    } catch (err) {
+        alert('Sem acesso a camera')
     }
 
-    const initializeCamera = async() => {
-        constraints.video.facingMode = 'user'
-       
-        try {
-            videoStream = await navigator.mediaDevices.getUserMedia(constraints)
-            video.srcObject = videoStream
-        } catch (err) {
-            alert('Sem acesso a camera')
-        }
-    }
+    const callVerifyFaceAPI = () => {
+        currentBlobFromFrame = makeBlobFromFrame(currentFrame)
+        blobFromDatabaseFrame = makeBlobFromFrame(IMAGE_FROM_DB)
+        verifyFaceAndAuth.authenticate() 
+    }  
 
-    initializeCamera()    
+    setInterval(() => {
+        currentFrame = getFrame()
+    }, 500)
 
-    setTimeout(function(){
-        processFace()
-    }, 2000)
+    setTimeout(() => {
+        callVerifyFaceAPI()
+    }, 1000)
 
-    setInterval(function() {
-        processFace()
-    }, 5000)
-}()
+    setInterval(() => {
+        callVerifyFaceAPI()
+    }, 4000)
+
+}().catch(err => {
+    console.log('Error:' + err)
+})

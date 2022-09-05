@@ -14,7 +14,7 @@ block content
             div
                 ul 
             div#up-photo
-                button#showModal.btn.btn-info(type='button'  data-bs-toggle='modal' data-bs-target='#userModal') Capturar
+                button#showModal.btn.btn-color.mt-2(type='button'  data-bs-toggle='modal' data-bs-target='#userModal') Capturar
 
         //- Modal
         div#userModal.modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true')
@@ -28,11 +28,11 @@ block content
                         img#userImage(src='' alt='User image' width='100%' height='100%')
 
                     div.modal-footer
-                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Fechar
-                        button#submit.btn.btn-primary(type='button') Enviar
+                        button.btn.btn-color-2(type='button' data-bs-dismiss='modal') Fechar
+                        button#submit.btn.btn-color(type='button') Enviar
 
 block script 
-    script(src='/js/api_detect.js') 
+    script(type= 'module' src='/js/api_detect.js') 
     script.
         // Cognitive Services variables.
         const API_URL = '#{API_URL}'
@@ -43,7 +43,6 @@ block script
 
         // General variables.
         let currentFace 
-        let saveUserImageToSend 
 
         // Control variables.
         const sendImage = document.querySelector('#submit')
@@ -51,17 +50,14 @@ block script
         const userImageEl = document.querySelector('#userImage')
 
         // Get current user image from in api_detect - Midleware setted in public.
-        const getCurrentImage = async (faceImage) => {
-            currentFace = faceImage 
-        }
+        const getCurrentImage = (faceImage) => { return currentFace = faceImage }
 
-        const showCurrentUserImage = async () => {
-            saveUserImageToSend = currentFace
-            userImageEl.src = saveUserImageToSend
+        const showCurrentUserImage = () => {
+            userImageEl.src = currentFace
         }
-
+        
         // Upload Image + Data
-        const registerAndSendUserFace = async () => {
+        const sendUserFace = async () => {
             try {
                 const { data } = await axios({
                     method: 'PUT',
@@ -78,5 +74,5 @@ block script
             }      
         }
         
-        sendImage.addEventListener('click', () => registerAndSendUserFace())
+        sendImage.addEventListener('click', () => sendUserFace())
         userModalEl.addEventListener('click', () => showCurrentUserImage())

@@ -10,7 +10,7 @@ const loginAuthRoute = (app) => {
     app.use(bodyParser.json()) // To face auth data.
 
     // Route to set login credentials.
-    app.route('/login')
+    app.route('/')
     .get(async (req, res) => {
         const error_msg = req.flash('error_msg') 
         const success_msg = req.flash('success_msg')
@@ -21,7 +21,6 @@ const loginAuthRoute = (app) => {
         const { isIdentical, confidence } = req.body
 
         if (typeof isIdentical !== 'undefined') { // Returns true without throwing errors.
-            console.log('Confiança:' + confidence)
             if (isIdentical && confidence > 0.6) {
                 return res.status(200).json({ redirect: '/home' })
             } else {
@@ -31,7 +30,7 @@ const loginAuthRoute = (app) => {
                 } else {
                     n_attempts = 1
                     req.flash('error_msg', 'Usuário não identificado, houve 3 tentativas e todas falharam!')
-                    return res.status(200).json({ redirect: '/login' })
+                    return res.status(200).json({ redirect: '/' })
                 }
             }
         } else {
@@ -51,7 +50,7 @@ const loginAuthRoute = (app) => {
     
                 } else { 
                     req.flash('error_msg', 'Login ou senha incorretos.')
-                    return res.redirect('/login')
+                    return res.redirect('/')
                 }
                     
             } catch (error) {

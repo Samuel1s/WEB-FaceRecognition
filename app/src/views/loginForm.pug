@@ -5,23 +5,28 @@ block head
     title= siteTitle
 
 block content
-    section.container
-        if error_msg != ''
-            div(class='alert alert-danger' role='alert')= error_msg
+    if error_msg != ''
+        div(class='container alert alert-danger alert-dismissible show fade' role='alert')
+            button(class='btn-close' data-bs-dismiss='alert') 
+            strong= error_msg
         
-        else if success_msg != ''
-            div(class='alert alert-success' role='alert')= success_msg
+    else if success_msg != ''
+        div(class='container alert alert-success alert-dismissible show fade' role='alert')= success_msg
+            button(class='btn-close' data-bs-dismiss='alert') 
+            strong= success_msg
 
+    section.container
         div.row
             div.col-md-6.offset-md-3
                 div.card.card-4.my-5
                     form(method='POST').card-4.card-body.cardbody-color.p-lg-5
-                        div.text-center
+                        div.text-center.container-fluid
                             img(
-                                src='https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png'
-                                class='img-fluid profile-image-pic img-thumbnail rounded-circle my-3' 
-                                width='200px'
+                                src='/assets/images/avatar-facial-recognition.jpeg'
+                                class='img-fluid img-thumbnail rounded-circle mb-3' 
                                 alt='profile'
+                                width='200px'
+                                height='200px'
                             )
                         div.mb-3
                             input(
@@ -40,14 +45,10 @@ block content
                                 placeholder='Password'
                             )
                         div.text-center
-                            button#btn-color.btn.px-5.mb-5.w-100(type='submit') Login
+                            button.btn.btn-color.px-5.mb-5.w-100(type='submit') Login
 
                         div#emailHelp.form-text.text-center.mb-5.text-dark Not Registered? 
                             a(href='/dataRegister' class='text-dark fw-bold') Create an Account
 block script 
     script.
-        const alert = document.querySelector('.alert')
-        
-        setTimeout(function(){
-            alert.style.display = 'none'
-        }, 3000)
+       window.onload = setTimeout(() => document.querySelector('.alert').remove(), 3000)

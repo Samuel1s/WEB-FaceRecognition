@@ -1,49 +1,58 @@
+import { getFrame, makeBlobFromFrame } from './general_functions.js'
+
 // Control variables.
 const setAttEl = document.querySelector('ul')
+const video = document.querySelector('#video')
 
-const detectFaceAttributes = async (blob) => {
-    const processImage = async (sourceImage) => {    
-        var param = {
-            'detectionModel': 'detection_01',
-            'recognitionModel': 'recognition_04',
-            'returnFaceAttributes': 'age, gender, smile, emotion'
-        }
-        try {
-            const { data } = await axios({
-                method: 'POST',
-                url: API_URL + 'detect', 
-                headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': KEY },
-                params: param,
-                data: sourceImage,
-            })
+// General Variables.
+let currentFrame
 
-            if (data.length == 1) {
-                setFaceAttribute(data[0])
+// Detect face attribute from Blob archive.
+const detectFaceAttributes = (function() {
+    let template = ''
+
+    function setFaceAttribute(data) {
+        template = `
+            <li>Idade(Apx): ${data.faceAttributes.age}</li>
+            <li>Sexo: ${data.faceAttributes.gender}</li>
+            <li>Sorriso: ${data.faceAttributes.smile}</li>
+            <li>Bravo: ${data.faceAttributes.emotion.anger}</li>
+            <li>Feliz: ${data.faceAttributes.emotion.happiness}</li>
+            <li>Triste: ${data.faceAttributes.emotion.sadness}</li>
+            <li>Neutro: ${data.faceAttributes.emotion.neutral}</li>
+            <li>Surpreso: ${data.faceAttributes.emotion.surprise}</li>
+        `
+        setAttEl.innerHTML = template
+    }
+
+    return {
+        processFaceAttribute: async function(blob) {    
+            const param = {
+                'detectionModel': 'detection_01',
+                'recognitionModel': 'recognition_04',
+                'returnFaceAttributes': 'age, gender, smile, emotion'
             }
-        } catch (error) {
-            console.error(error)
+            try {
+                const { data } = await axios({
+                    method: 'POST',
+                    url: API_URL + 'detect', 
+                    headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': KEY },
+                    params: param,
+                    data: blob,
+                })
+    
+                if (data.length == 1) {
+                    setFaceAttribute(data[0])
+                }
+            } catch (error) {
+                console.error(error)
+            }
         }
     }
+})()
 
-    const setFaceAttribute = (data) => {
-        setAttEl.innerHTML = ''
-        setAttEl.innerHTML += `<li>Idade(Apx): ${data.faceAttributes.age}</li>`
-        setAttEl.innerHTML += `<li>Sexo: ${data.faceAttributes.gender}</li>`
-        setAttEl.innerHTML += `<li>Sorriso: ${data.faceAttributes.smile}</li>`
-        setAttEl.innerHTML += `<li>Bravo: ${data.faceAttributes.emotion.anger}</li>`
-        setAttEl.innerHTML += `<li>Feliz: ${data.faceAttributes.emotion.happiness}</li>`
-        setAttEl.innerHTML += `<li>Triste: ${data.faceAttributes.emotion.sadness}</li>`
-        setAttEl.innerHTML += `<li>Neutro: ${data.faceAttributes.emotion.neutral}</li>`
-        setAttEl.innerHTML += `<li>Surpreso: ${data.faceAttributes.emotion.surprise}</li>`
-
-    }
-
-    // Start Azure REST API.
-    processImage(blob)
-}
-
-// Camera start with navigator js.
-void function() {
+// Start camera with navigator js and get frame by frame to build a user face image.
+void async function startCamera() {
     if (!'mediaDevices' in navigator || 
         !'getUserMedia' in navigator.mediaDevices
     ){
@@ -51,12 +60,7 @@ void function() {
         return
     } 
 
-    // Control variables.
-    const video = document.querySelector('#video')
-    const canvas = document.querySelector('#canvas')
-
     // General variables.
-    let videoStream
     const constraints = {
         video: {
             width: {
@@ -68,55 +72,36 @@ void function() {
                 min: 720,
                 ideal: 1080,
                 max: 1440
-            }
+            },
+            facingMode: 'user'
         }
     }
 
-    const makeBlob = (dataURL) => {
-        const BASE64_MAKER = ';base64,'
-        const parts = dataURL.split(BASE64_MAKER)
-        const contentType = parts[0].split(':')[1]
-        const raw = window.atob(parts[1])
-        const rawLength = raw.length
-        const uInt8Array = new Uint8Array(rawLength)
+    try {
+        let videoStream = await navigator.mediaDevices.getUserMedia(constraints)
+        video.srcObject = videoStream
 
-        for (let i=0; i < rawLength; ++i) {
-            uInt8Array[i] = raw.charCodeAt(i)
-        }
-        return new Blob([uInt8Array], { type: contentType })
+    } catch (err) {
+        alert('Sem acesso a camera')
     }
 
-    const processFace = () => {
-        const { videoWidth, videoHeight } = video
-
-        const img = document.createElement('img')
-        canvas.width = videoWidth
-        canvas.height = videoHeight
-        canvas.getContext('2d').drawImage(video, 0 ,0)
-        img.src = canvas.toDataURL('image/jpeg')
-        getCurrentImage(img.src) // Current Face Image(Base64) getted every time.
-        let blob = makeBlob(img.src) // Convert Image(Base64) to Blob type.
-        detectFaceAttributes(blob)
+    const callDetectFaceAPI = () => {
+        detectFaceAttributes.processFaceAttribute(makeBlobFromFrame(currentFrame))
     }
 
-    const initializeCamera = async() => {
-        constraints.video.facingMode = 'user'
-       
-        try {
-            videoStream = await navigator.mediaDevices.getUserMedia(constraints)
-            video.srcObject = videoStream
-        } catch (err) {
-            alert('Sem acesso a camera')
-        }
-    }
+    setInterval(() => {
+        currentFrame = getFrame()
+        getCurrentImage(currentFrame)
+    }, 500)
 
-    initializeCamera()
+    setTimeout(() => {
+        callDetectFaceAPI()
+    }, 1000)
 
-    setTimeout(function(){
-        processFace()
-    }, 2000)
+    setInterval(() => {
+        callDetectFaceAPI()
+    }, 4000)
 
-    setInterval(function() {
-        processFace()
-    }, 5000)
-}()
+}().catch(err => {
+    console.log('Error:' + err)
+})

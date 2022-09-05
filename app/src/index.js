@@ -42,6 +42,6 @@ faceRegisterRoute(app)
 // Server Connection 
 db.connect().then(() => {
     app.listen(process.env.PORT, () => {
-        console.log('servidor online')
+        console.log('Servidor online')
     })
 })

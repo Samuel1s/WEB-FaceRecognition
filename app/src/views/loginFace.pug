@@ -21,7 +21,7 @@ block content
             p#error_alert
 
 block script 
-    script(src='/js/api_find.js')
+    script(type='module' src='/js/api_find.js')
     script.
         // Cognitive Services variables.
         const API_URL = '#{API_URL}'
@@ -31,4 +31,4 @@ block script
         const LOCAL_URL = '#{LOCAL_URL}'
 
         // General variables.
-        const image64 = '#{data.userImage}'
+        const IMAGE_FROM_DB = '#{data.userImage}'
