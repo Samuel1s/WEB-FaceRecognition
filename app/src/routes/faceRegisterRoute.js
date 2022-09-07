@@ -1,5 +1,6 @@
-import UsersModel from '../model/users.js'
 import bodyParser from 'body-parser'
+import { showUserFaceRegisterInterface, updateAndSaveUserFace } from '../controller/registerController.js'
+
 
 const faceRegisterRoute = (app) => {
     // Set bodyParser type.
@@ -7,36 +8,8 @@ const faceRegisterRoute = (app) => {
     
     // Route to register user face.
     app.route('/faceRegister/:id?')
-    .get(async (req, res) => {
-        const context = req.cookies['context']
-        
-        return res.render('registerFace', { 
-            data: context, 
-            LOCAL_URL: process.env.LOCAL_URL, API_URL: process.env.API_URL, KEY: process.env.KEY 
-        }) 
-    })
-    .put(async (req, res) => {
-        const { id } = req.params
-
-        if (!id) {
-            return res.status(400).send({ error: 'Users id is missing.' })
-        }
-
-        try {
-            const updatedUser = await UsersModel.findOneAndUpdate({ _id: id }, { userImage: req.body }, { new: true })
-
-            if (updatedUser) {
-                req.flash('success_msg', 'Usuário cadastrado.')
-
-                return res.status(200).json({ redirect: '/'})
-            }
-
-            return res.status(400).send({ error: 'Could not update the user.' })
-
-        } catch (error) {
-            res.send(error)
-        }
-    })
+    .get(showUserFaceRegisterInterface)
+    .put(updateAndSaveUserFace)
 }
 
 export default faceRegisterRoute

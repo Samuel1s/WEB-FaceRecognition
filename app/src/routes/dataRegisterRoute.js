@@ -1,5 +1,5 @@
-import UsersModel from '../model/users.js'
 import bodyParser from 'body-parser'
+import { showUserDataRegisterForm, saveUserData } from '../controller/registerController.js'
 
 const dataRegisterRoute = (app) => {
     // Set bodyParser type.
@@ -7,27 +7,8 @@ const dataRegisterRoute = (app) => {
 
     // Route to register user data.
     app.route('/dataRegister')
-    .get(async (req, res) => {
-        const error_msg = req.flash('error_msg') 
-
-        return res.render('registerForm', { error_msg })
-    })
-
-    .post(async (req, res) => {
-        try {
-            const user = new UsersModel(req.body)
-            const save = await user.save()
-           
-            if(save) {
-                res.cookie('context', save, { httpOnly: true })
-                return res.redirect('/faceRegister') 
-            }
-
-        } catch (error) {
-            req.flash('error_msg', 'Email já em uso, tente outro.')
-            return res.redirect('/dataRegister')
-        }
-    })
+    .get(showUserDataRegisterForm)
+    .post(saveUserData)
 }
 
 export default dataRegisterRoute
